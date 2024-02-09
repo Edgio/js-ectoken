@@ -1,0 +1,11 @@
+{
+  "name": "js-ectoken",
+  "version": "1.0.0",
+  "description": "JS implementation of Edgio token (ectoken)",
+  "main": "index.js",
+  "author": "Tom Mount <tmount@edg.io>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "base64url": "^3.0.1"
+  }
+}
