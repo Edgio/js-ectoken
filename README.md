@@ -1,5 +1,5 @@
 # js-ectoken
-> _JavaScript implementation of Edgio token (`ectoken`)
+> _JavaScript implementation of Edgio token (`ectoken`)_
 
 ## Table of Contents
 
