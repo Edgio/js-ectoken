@@ -11,7 +11,7 @@
 
 ## Background
 
-JavaScript implementation of the "Edgio Token" (`ectoken`) - see main repo [ectoken](https://github.com/edgio/ectoken) for mroe details.
+JavaScript implementation of the "Edgio Token" (`ectoken`) - see main repo [ectoken](https://github.com/edgio/ectoken) for more details.
 
 ## Install
 
