@@ -2,7 +2,6 @@ const crypto = require('crypto')
 const base64url = require('base64url')
 
 const iv_size_bytes = 12
-const aes_gcm_tag_size_bytes = 16
 
 /**
  * An EdgeCast Token
@@ -71,29 +70,40 @@ class ECToken {
  * @param {String} key The secret key to encode the token.
  * @param {ECToken} token The token to encrypt.
  * @param {Boolean} verbose Whether to print verbose output.
- * @returns {String} The encrypted token.
+ * @returns {Promise<String>} The encrypted token.
  */
-function encrypt(key, token, verbose = false) {
-  const token_str = token.serialize().toString('utf-8')
-  const key_encoded = key.toString('utf-8')
+async function encrypt(key, token, verbose = false) {
+  const token_str = new TextEncoder().encode(token.serialize())
+  const key_encoded = new TextEncoder().encode(key)
 
-  const key_digest = crypto.createHash('sha256').update(key_encoded).digest()
+  const key_digest = await crypto.subtle.digest('SHA-256', key_encoded)
 
-  const iv = crypto.randomBytes(iv_size_bytes)
+  const iv = crypto.getRandomValues(new Uint8Array(iv_size_bytes))
 
-  const encryptor = crypto.createCipheriv('aes-256-gcm', key_digest, iv).setAutoPadding(false)
-  const ciphertext = encryptor.update(token_str)
-  encryptor.final('utf-8')
-  const tag = encryptor.getAuthTag()
-  const iv_ciphertext = Buffer.concat([iv, ciphertext, tag])
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    key_digest,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt']
+  )
+
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    token_str
+  )
+
+  const iv_ciphertext = new Uint8Array(iv.byteLength + ciphertext.byteLength)
+  iv_ciphertext.set(new Uint8Array(iv), 0)
+  iv_ciphertext.set(new Uint8Array(ciphertext), iv.byteLength)
 
   if (verbose) {
     console.log('+---------------------------------------------------------------------------------------------------')
-    console.log('| iv:', iv.toString('hex'))
-    console.log('| ciphertext:', ciphertext.toString('hex'))
-    console.log('| tag:', tag.toString('hex'))
+    console.log('| iv:', Buffer.from(iv).toString('hex'))
+    console.log('| ciphertext:', Buffer.from(ciphertext).toString('hex'))
     console.log('+---------------------------------------------------------------------------------------------------')
-    console.log('| encoded_token:', iv_ciphertext.toString('hex'))
+    console.log('| encoded_token:', Buffer.from(iv_ciphertext).toString('hex'))
     console.log('+---------------------------------------------------------------------------------------------------')
   }
 
@@ -105,21 +115,19 @@ function encrypt(key, token, verbose = false) {
  * @param {String} key The secret to decode the token.
  * @param {String} token The token to decrypt.
  * @param {Boolean} verbose Whether to print verbose output.
- * @returns {String} The decrypted token.
+ * @returns {Promise<String>} The decrypted token.
  */
-function decrypt(key, token, verbose = false) {
-  const key_digest = crypto.createHash('sha256').update(key).digest()
+async function decrypt(key, token, verbose = false) {
+  const key_encoded = new TextEncoder().encode(key)
+  const key_digest = await crypto.subtle.digest('SHA-256', key_encoded)
 
   const decoded_token = base64url.toBuffer(token)
 
   // First n bytes (iv_size_bytes) is the iv.
   const iv = decoded_token.subarray(0, iv_size_bytes)
 
-  // Last n bytes (aes_gcm_tag_size_bytes) is the tag.
-  const tag = decoded_token.subarray(-aes_gcm_tag_size_bytes)
-
-  // Middle bit is the ciphertext.
-  const ciphertext = decoded_token.subarray(iv_size_bytes, -aes_gcm_tag_size_bytes)
+  // last bit is the ciphertext.
+  const ciphertext = decoded_token.subarray(iv_size_bytes)
 
   if (verbose) {
     console.log('+---------------------------------------------------------------------------------------------------')
@@ -127,22 +135,29 @@ function decrypt(key, token, verbose = false) {
     console.log('+---------------------------------------------------------------------------------------------------')
     console.log('| iv:', iv.toString('hex'))
     console.log('| ciphertext:', ciphertext.toString('hex'))
-    console.log('| tag:', tag.toString('hex'))
     console.log('+---------------------------------------------------------------------------------------------------')
   }
 
-  const decipher = crypto.createDecipheriv('aes-256-gcm', key_digest, iv).setAutoPadding(false)
-  decipher.setAuthTag(tag)
-  const decrypted_buffer = decipher.update(ciphertext)
-  decipher.final('utf8')
-  const decrypted_str = decrypted_buffer.toString('utf-8')
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw',
+    key_digest,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['decrypt']
+  )
+
+  const decrypted_str = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    ciphertext
+  )
 
   if (verbose) {
-    console.log('| decrypted_str:', decrypted_str)
+    console.log('| decrypted_str:', new TextDecoder().decode(decrypted_str))
     console.log('+---------------------------------------------------------------------------------------------------')
   }
 
-  return decrypted_str
+  return new TextDecoder().decode(decrypted_str)
 }
 
 module.exports = {
