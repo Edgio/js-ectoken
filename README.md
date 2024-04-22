@@ -29,8 +29,8 @@ const ec_token = new ECToken()
 ec_token.addValue('ec_country_allow', 'US')
 // Add additional directives in the same way.
 
-const token = encrypt('my-secret-key', ec_token)
-const plaintext = decrypt('my-secret-key', token)
+const token = await encrypt('my-secret-key', ec_token)
+const plaintext = await decrypt('my-secret-key', token)
 ```
 
 ## Contribute
