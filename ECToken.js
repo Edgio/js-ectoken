@@ -53,7 +53,7 @@ class ECToken {
   serialize() {
     let token = Object.keys(this.values).reduce((acc, curr) => {
       if (curr === 'ec_expire' && this.values.ec_expire && this.values.ec_expire > 0) {
-        acc.push(`ex_expire=${this.values.ec_expire}`)
+        acc.push(`ec_expire=${this.values.ec_expire}`)
       } else {
         if (this.values[curr].length) {
           acc.push(`${curr}=${this.values[curr].join(',')}`)
