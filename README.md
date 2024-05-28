@@ -43,6 +43,8 @@ const plaintext = await V3.decrypt('my-secret-key', token)
 
 **Please Note**: because this version of the token generator uses `crypto.subtle`, the `encrypt` and `decrypt` functions **are now asynchronous.**
 
+The `ECToken` helper class is optional for both the namespaced and non-namespaced import variations. The `encrypt` function will accept either an `ECToken` object or a plain `string`.
+
 ## Contribute
 
 We welcome issues, questions, and pull requests.
