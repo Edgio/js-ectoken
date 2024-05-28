@@ -22,7 +22,7 @@ $ npm install js-ectoken
 ## Usage
 
 ```js
-const { ECToken, encrypt, decrypt } = require('js-ectoken')
+const { ECToken, encrypt, decrypt } = require('@edgio/js-ectoken')
 
 const ec_token = new ECToken()
 ec_token.addValue('ec_country_allow', 'US')
@@ -35,7 +35,7 @@ const plaintext = await decrypt('my-secret-key', token)
 If installing this library as a replacement for [`ectoken-nodejs`](https://github.com/hattan/ectoken-nodejs), import the `V3` namespace instead:
 
 ```js
-const { V3 } = require('js-ectoken')
+const { V3 } = require('@edgio/js-ectoken')
 
 const token = await V3.encrypt('my-secret-key', 'some_param=valueA&some_other_param=valueB')
 const plaintext = await V3.decrypt('my-secret-key', token)
