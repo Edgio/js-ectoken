@@ -16,7 +16,7 @@ JavaScript implementation of the "Edgio Token" (`ectoken`) - see main repo [ecto
 ## Install
 
 ```
-$ npm install js-ectoken
+$ npm install @edgio/js-ectoken
 ```
 
 ## Usage
