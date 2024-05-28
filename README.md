@@ -37,8 +37,8 @@ If installing this library as a replacement for [`ectoken-nodejs`](https://githu
 ```js
 const { V3 } = require('js-ectoken')
 
-const token = await encrypt('my-secret-key', 'some_param=valueA&some_other_param=valueB')
-const plaintext = await decrypt('my-secret-key', token)
+const token = await V3.encrypt('my-secret-key', 'some_param=valueA&some_other_param=valueB')
+const plaintext = await V3.decrypt('my-secret-key', token)
 ```
 
 **Please Note**: because this version of the token generator uses `crypto.subtle`, the `encrypt` and `decrypt` functions **are now asynchronous.**
