@@ -1,10 +1,34 @@
 {
   "name": "js-ectoken",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "JS implementation of Edgio token (ectoken)",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edgio/js-ectoken.git"
+  },
+  "keywords": [
+    "ectoken",
+    "token",
+    "auth",
+    "edgecast",
+    "edgio",
+    "vdms"
+  ],
   "author": "Tom Mount <tmount@edg.io>",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Edgio/js-ectoken/issues"
+  },
+  "engines": {
+    "node": ">= 15.0.0"
+  },
+  "homepage": "https://github.com/Edgio/js-ectoken#readme",
   "dependencies": {
     "base64url": "^3.0.1"
   }
