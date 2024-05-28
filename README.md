@@ -15,15 +15,14 @@ JavaScript implementation of the "Edgio Token" (`ectoken`) - see main repo [ecto
 
 ## Install
 
-1. Clone this repo.
-2. `cd` into the repo directory
-3. Run `npm install`
+```
+$ npm install js-ectoken
+```
 
 ## Usage
 
-This library is provided in CommonJS (CJS) format. To include the library in a script, `require` it:
 ```js
-const { ECToken, encrypt, decrypt } = require('./ECToken.js')
+const { ECToken, encrypt, decrypt } = require('js-ectoken')
 
 const ec_token = new ECToken()
 ec_token.addValue('ec_country_allow', 'US')
@@ -32,6 +31,17 @@ ec_token.addValue('ec_country_allow', 'US')
 const token = await encrypt('my-secret-key', ec_token)
 const plaintext = await decrypt('my-secret-key', token)
 ```
+
+If installing this library as a replacement for [`ectoken-nodejs`](https://github.com/hattan/ectoken-nodejs), import the `V3` namespace instead:
+
+```js
+const { V3 } = require('js-ectoken')
+
+const token = await encrypt('my-secret-key', 'some_param=valueA&some_other_param=valueB')
+const plaintext = await decrypt('my-secret-key', token)
+```
+
+**Please Note**: because this version of the token generator uses `crypto.subtle`, the `encrypt` and `decrypt` functions **are now asynchronous.**
 
 ## Contribute
 
