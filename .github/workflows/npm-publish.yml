@@ -4,11 +4,8 @@
 name: Node.js Package
 
 on:
-  # temporary trigger for testing
-  workflow_dispatch:
-
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   publish-npm:
