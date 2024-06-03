@@ -1,4 +1,4 @@
-# js-ectoken
+# @edgio/ectoken
 > _JavaScript implementation of Edgio token (`ectoken`)_
 
 ## Table of Contents
