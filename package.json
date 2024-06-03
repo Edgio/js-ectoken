@@ -3,9 +3,22 @@
   "version": "1.0.0",
   "description": "JS implementation of Edgio token (ectoken)",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edgio/js-ectoken.git"
+  },
+  "keywords": [
+    "edgio",
+    "ectoken",
+    "edgecast",
+    "token"
+  ],
   "author": "Tom Mount <tmount@edg.io>",
   "license": "Apache-2.0",
   "dependencies": {
     "base64url": "^3.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
